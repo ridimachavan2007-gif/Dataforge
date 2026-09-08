@@ -1,0 +1,323 @@
+@import '@livekit/components-styles';
+
+:root {
+  /* ── Color ── */
+  --ink: #12141c;
+  --ink-light: #1b1e28;
+  --ink-lighter: #262a37;
+  --paper: #f2efe9;
+  --paper-dim: #a9a7a0;
+  --marigold: #e7a33e;   /* speaking / thinking */
+  --dusk-rose: #c97b84;  /* listening */
+  --sage: #6b7a70;       /* idle / quiet */
+  --danger: #c9605a;
+
+  /* ── Type ── */
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* current "voice" color, switched by data-state on .orb-wrap */
+  --voice-color: var(--sage);
+
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  font-family: inherit;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--marigold);
+  outline-offset: 3px;
+}
+
+/* ───────────────────────── App shell ───────────────────────── */
+
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.wordmark {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  padding: 1.5rem 1.75rem;
+  color: var(--paper-dim);
+}
+
+/* ───────────────────────── Connect screen ───────────────────────── */
+
+.connect-screen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem 1.5rem;
+  gap: 2.5rem;
+}
+
+.connect-screen h1 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.25rem, 6vw, 3.25rem);
+  margin: 0;
+  color: var(--paper);
+}
+
+.connect-screen p {
+  max-width: 34ch;
+  margin: 0.75rem auto 0;
+  color: var(--paper-dim);
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+.connect-button {
+  background: var(--marigold);
+  color: var(--ink);
+  border: none;
+  border-radius: 999px;
+  padding: 0.9rem 2.25rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.connect-button:hover {
+  background: #f0b45e;
+}
+
+.connect-button:active {
+  transform: scale(0.97);
+}
+
+.connect-button:disabled {
+  background: var(--ink-lighter);
+  color: var(--paper-dim);
+  cursor: wait;
+}
+
+/* ───────────────────────── Voice orb ───────────────────────── */
+
+.orb-wrap {
+  --voice-color: var(--sage);
+  position: relative;
+  width: 220px;
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.orb-wrap[data-state='listening'] {
+  --voice-color: var(--dusk-rose);
+}
+
+.orb-wrap[data-state='thinking'],
+.orb-wrap[data-state='speaking'] {
+  --voice-color: var(--marigold);
+}
+
+.orb-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 45%, var(--voice-color) 0%, transparent 70%);
+  opacity: 0.35;
+  filter: blur(6px);
+  animation: breathe 4.5s ease-in-out infinite;
+  transition: background 0.6s ease;
+}
+
+.orb-wrap[data-state='speaking'] .orb-glow,
+.orb-wrap[data-state='thinking'] .orb-glow {
+  animation-duration: 1.8s;
+  opacity: 0.5;
+}
+
+.orb-core {
+  position: relative;
+  width: 132px;
+  height: 132px;
+  border-radius: 50%;
+  background: var(--ink-light);
+  border: 1px solid color-mix(in srgb, var(--voice-color) 45%, transparent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.6s ease;
+}
+
+.orb-bars {
+  --lk-fg: var(--voice-color);
+  --lk-va-bg: color-mix(in srgb, var(--voice-color) 25%, transparent);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 44px;
+}
+
+@keyframes breathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.08);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orb-glow {
+    animation: none;
+  }
+}
+
+.state-label {
+  margin-top: 1.5rem;
+  font-size: 0.95rem;
+  color: var(--paper-dim);
+  min-height: 1.4em;
+}
+
+/* ───────────────────────── Conversation stage ───────────────────────── */
+
+.stage {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.5rem 1rem;
+}
+
+.transcript {
+  width: 100%;
+  max-width: 480px;
+  margin-top: 2.5rem;
+  max-height: 34vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  padding-right: 0.25rem;
+}
+
+.transcript::-webkit-scrollbar {
+  width: 4px;
+}
+
+.transcript::-webkit-scrollbar-thumb {
+  background: var(--ink-lighter);
+  border-radius: 4px;
+}
+
+.transcript-line {
+  text-align: left;
+  line-height: 1.55;
+  font-size: 0.95rem;
+}
+
+.transcript-line .speaker {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--paper-dim);
+  margin-bottom: 0.15rem;
+}
+
+.transcript-line--user {
+  color: var(--paper);
+}
+
+.transcript-line--agent {
+  color: var(--paper);
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.02rem;
+}
+
+.transcript-empty {
+  color: var(--paper-dim);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+/* ───────────────────────── Control bar ───────────────────────── */
+
+.control-bar {
+  display: flex;
+  justify-content: center;
+  gap: 0.9rem;
+  padding: 1.5rem 1.5rem 2.25rem;
+}
+
+.control-button {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 1px solid var(--ink-lighter);
+  background: var(--ink-light);
+  color: var(--paper);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.control-button:hover {
+  border-color: var(--voice-color, var(--marigold));
+}
+
+.control-button[data-active='false'] {
+  color: var(--paper-dim);
+}
+
+.control-button--end {
+  background: var(--danger);
+  border-color: var(--danger);
+  color: var(--ink);
+}
+
+.control-button--end:hover {
+  background: #d4726c;
+}
+
+/* ───────────────────────── Status / error banner ───────────────────────── */
+
+.status-banner {
+  max-width: 420px;
+  margin: 0 auto 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--danger) 16%, var(--ink-light));
+  border: 1px solid color-mix(in srgb, var(--danger) 40%, transparent);
+  color: var(--paper);
+  font-size: 0.88rem;
+  text-align: center;
+}
