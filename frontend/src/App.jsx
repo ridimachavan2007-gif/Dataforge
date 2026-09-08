@@ -33,8 +33,7 @@ export default function App() {
 
   const session = useSession(tokenSource, {
     roomName: roomNameRef.current,
-    agentName: LIVEKIT_CONFIG.agentName,
-    tracks: { microphone: { enabled: true } }
+    agentName: LIVEKIT_CONFIG.agentName
   })
 
   const started = session.connectionState !== ConnectionState.Disconnected
