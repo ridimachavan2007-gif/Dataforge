@@ -1,0 +1,47 @@
+<svg
+  viewBox="0 0 200 200"
+  xmlns="http://www.w3.org/2000/svg"
+  width="200"
+  height="200"
+>
+  <defs>
+    <filter id="auraGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2.5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <g
+    fill="none"
+    stroke="#8fa8c7"
+    stroke-width="7"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    filter="url(#auraGlow)"
+  >
+    <!-- Aura A -->
+    <path d="M48 145 C65 122 70 75 100 48 C130 75 135 122 152 145"/>
+
+    <!-- Flowing voice wave -->
+    <path d="M32 112 C62 135 82 100 105 92 C128 84 145 104 168 112"/>
+
+    <!-- Lower flowing stroke -->
+    <path d="M45 145 C62 151 75 136 84 121"/>
+
+    <!-- Inner crossing stroke -->
+    <path d="M116 93 C125 108 135 128 153 145"/>
+
+    <!-- Aura core -->
+    <circle cx="100" cy="93" r="11"/>
+    <circle
+      cx="100"
+      cy="93"
+      r="4"
+      fill="#b9d5f5"
+      stroke="none"
+    />
+  </g>
+</svg>
